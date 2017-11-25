@@ -56,13 +56,14 @@ module Bambora
       def push_into_file(params)
         validate_args params
         array << OpenStruct.new(txn_type:      params[:payment_type],
-                                transit:       params[:transit_number].to_s,
                                 institution:   params[:institution_number].to_s,
+                                transit:       params[:transit_number].to_s,
                                 account:       params[:account_number].to_s,
                                 amount:        params[:amount],
-                                ref:           params[:reference].to_s,
+                                ref:           (params[:reference] || 0 ).to_s,
                                 recipient:     params[:recipient].to_s,
-                                customer_code: params[:customer_code].to_s
+                                customer_code: params[:customer_code].to_s,
+                                descriptor:    params[:dynamic_descriptor].to_s
                                )
       end
       private
@@ -73,9 +74,9 @@ module Bambora
         unless params[:payment_type] == "D" || params[:payment_type] == "C"
           raise ArgumentError, "Must provide payment type: C (credit) or D (debit)" 
         end
-        if params[:customer_code].nil? && (params[:transit_number] || 
-                                           params[:institution_number] ||
-                                           params[:account_number])
+        if params[:customer_code].nil? && (params[:transit_number].nil? || 
+                                           params[:institution_number].nil? ||
+                                           params[:account_number].nil?)
           raise ArgumentError, "Must either provide customer code or transit, institution, and account #s"
         end
       end

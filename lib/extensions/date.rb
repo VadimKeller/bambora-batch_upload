@@ -24,7 +24,7 @@ class Date
   end
 
   def sub_day? 
-    self.wday == self.class.monday && ( (self-1.day).holiday?(:ca_bc) || (self-2.day).holiday?(:ca_bc) )
+    self.wday == self.class.monday && ( (self-1).holiday?(:ca_bc) || (self-2).holiday?(:ca_bc) )
   end
 
 end

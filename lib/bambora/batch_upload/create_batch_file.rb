@@ -39,13 +39,14 @@ module Bambora::BatchUpload
       txn_array.each do |txn|
         string << "E,"
         string << "#{txn.txn_type}," #C for Credit, D for Debit
-        string << "#{txn.transit},"
         string << "#{txn.institution},"
+        string << "#{txn.transit},"
         string << "#{txn.account},"
         string << "#{txn.amount},"
         string << "#{txn.ref},"
         string << "#{txn.recipient},"
-        string << "#{txn.customer_code}"
+        string << "#{txn.customer_code},"
+        string << "#{txn.descriptor}"
         string << "\r\n"
       end
       string

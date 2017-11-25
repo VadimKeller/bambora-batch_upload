@@ -40,8 +40,20 @@ To create a batch file and then upload:
 ```ruby
   #payment type has to be D (debit) or C (credit)
   #amount must be specified in pennies
+  #if reference is not specified, it will be set to 0
+  #recipient and dynamic descriptor are optional
   Bambora::BatchUpload.create_file do |reader|
-    reader.push_into_file(payment_type: "D", amount: 100, reference: 33, customer_code: "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX") 
+    reader.push_into_file(payment_type: "D", amount: 100, reference: 34, 
+                          customer_code: "C6777B381C16434B82d40A8d23a19a68",
+                          dynamic_descriptor: "Wesam Corp") 
+    reader.push_into_file(payment_type: "D",
+                          institution_number: "123",
+                          transit_number: "12345",
+                          account_number: "123458",
+                          amount: 200,
+                          reference: 667,
+                          recipient: "Haddad"
+                          )
     ##more lines
     #reader.push_into_file(...)
   end
