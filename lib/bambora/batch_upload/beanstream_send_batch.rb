@@ -8,7 +8,6 @@ module Bambora::BatchUpload
     attr_accessor :file_path
     attr_accessor :process_date
     attr_accessor :process_now
-    attr_accessor :failure_message
 
     def initialize(file_path, process_date, process_now)
       @file_path    = file_path
@@ -24,15 +23,17 @@ module Bambora::BatchUpload
       end
       c.multipart_form_post  = true
       c.http_post(criteria_content,file_content)
-      response    = JSON.parse(c.body)
+      response       = JSON.parse(c.body)
+      response_code  = c.response_code
       if response["code"] == BATCH_PROCESS_SUCCESS 
-        response["batch_id"] 
+        response["batch_id"]
       else 
-        @failure_message = "Message: #{response["message"]}, Date: #{process_date}"
-        nil
+        raise BatchUploadError.new(code: response["code"], category: response["category"], message: response["message"], http_code: response_code)
       end
     end
-  
+
+    private
+
     def criteria_content
       criteria_content  = Curl::PostField.content("criteria",
                                                   "{'process_date':#{process_date_formatted},'process_now':#{process_now} }",

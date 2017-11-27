@@ -37,16 +37,26 @@ module Bambora::BatchUpload
     def file_content
       string  = "" 
       txn_array.each do |txn|
-        string << "E,"
-        string << "#{txn.txn_type}," #C for Credit, D for Debit
-        string << "#{txn.institution},"
-        string << "#{txn.transit},"
-        string << "#{txn.account},"
+        string << "#{txn.txn_type},"     #E for EFT, A for ACH
+        string << "#{txn.payment_type}," #C for Credit, D for Debit
+        if txn.txn_type == "E"
+          string << "#{txn.institution_number},"
+          string << "#{txn.transit_number},"
+          string << "#{txn.account_number},"
+        else
+          string << "#{txn.transit_routing_number},"
+          string << "#{txn.account_number},"
+          string << "#{txn.account_code},"
+        end
         string << "#{txn.amount},"
         string << "#{txn.ref},"
         string << "#{txn.recipient},"
         string << "#{txn.customer_code},"
         string << "#{txn.descriptor}"
+        if txn.txn_type == "A"
+          string << ",#{txn.standard_entry_code}," #add comma at beginning to separate from above
+          string << "#{txn.entry_detail_addenda}"
+        end
         string << "\r\n"
       end
       string

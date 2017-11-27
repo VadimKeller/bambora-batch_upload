@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["alwesam"]
   spec.email         = ["alwesam@gmail.com"]
 
-  spec.summary       = %q{Ruby wrapper to upload ETF batch files.}
-  spec.description   = %q{Ruby wrapper to upload ETF batch files to Bambora.}
+  spec.summary       = %q{Ruby wrapper to upload batch files.}
+  spec.description   = %q{Ruby wrapper to upload batch files to Bambora.}
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|

@@ -1,8 +1,10 @@
 # Bambora::BatchUpload
 
-Unofficial ruby wrapper for EFT batch uploads to Bambora.
+Unofficial ruby wrapper for EFT and ACH batch uploads to Bambora.
 
-Under development
+## TODO
+
+Add credit card batch upload.
 
 ## Installation
 
@@ -21,6 +23,8 @@ Or install it yourself as:
     $ gem install bambora-batch_upload
 
 ## Usage
+
+See Bambora [Batch Payment API](https://dev.na.bambora.com/docs/references/batch_payment/#format-of-data-in-file) for reference.
 
 To configure the upload, you must provide your merchant ID as well as Batch
 Upload API Key. The default location for batch files (before uploading) is /tmp.
@@ -56,6 +60,21 @@ To create a batch file and then upload:
                           )
     ##more lines
     #reader.push_into_file(...)
+  end
+
+  ##for ACH
+  Bambora::BatchUpload.create_file("A") do |reader|
+    reader.push_into_file(payment_type: "D", amount: 100, reference: 34, 
+                          customer_code: "C6777B381C16434B82d40A8d23a19a68",
+                          dynamic_descriptor: "Wesam Corp") 
+    reader.push_into_file(payment_type: "D",
+                          transit_routing_number: "123456789",
+                          account_number: "123458",
+                          account_code: "PC",
+                          amount: 200,
+                          reference: 667,
+                          recipient: "Haddad"
+                          )
   end
    
   #by default process date is next business day
